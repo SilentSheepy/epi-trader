@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     data() {
@@ -59,9 +59,7 @@ export default {
         };
     },
     computed: {
-        funds() {
-            return this.$store.getters.funds;
-        },
+        ...mapGetters(['stocks','funds', 'stockPort']),
     },
     methods: {
         ...mapActions({
@@ -69,9 +67,13 @@ export default {
             fetchData: 'loadData',
         }),
         saveData() {
-            // TODO: 2 - Get the funds, stockPortfolio and stocks from the store
-            // and save them to the Firebase DB
-            const data = {};
+            const data = {
+              stocks: this.stocks,
+              funds: this.funds,
+              stockPortfolio: this.stockPortfolio,
+            };
+
+            this.$http.put('data.json', data);
         },
         loadData() {
             this.fetchData();
